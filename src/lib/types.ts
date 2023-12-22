@@ -1,16 +1,19 @@
-interface Viewer {
+interface Session {
+	created: number;
+	desc: string;
 	id: string;
-	images: string[];
-	single: boolean;
-	portraits: number[];
+	items: Item[];
+	status: "new" | "active" | "completed";
+	title: string;
+	updated: number;
+	viewers: string[];
 }
 
-interface Image {
-	url: string;
-	carousel: boolean;
-	gallery: boolean;
-	index: number;
-	now: boolean;
+interface Item {
+	id: string;
 	title: string;
-	id?: string;
+	status: "new" | "active" | "completed";
+	votes: {
+		[id: string]: number;
+	}
 }
