@@ -5,13 +5,13 @@ import { getAuth } from "firebase/auth"
 
 
 const firebaseConfig = {
-	apiKey: "AIzaSyB69NOmX0uQ9taZAq4jcEKLCLnxjxuqzdU",
-	authDomain: "viewerino.firebaseapp.com",
-	projectId: "viewerino",
-	storageBucket: "viewerino.appspot.com",
-	messagingSenderId: "228655171573",
-	appId: "1:228655171573:web:afae377f88c35eb8f402bc",
-	// measurementId: "G-3BBGXLKDHB"
+	apiKey: "AIzaSyAzz-mceNyFGQknpKHmX5z_YlVe5Mk4DPo",
+	authDomain: "pattapatta-37622.firebaseapp.com",
+	projectId: "pattapatta-37622",
+	storageBucket: "pattapatta-37622.appspot.com",
+	messagingSenderId: "626102423213",
+	appId: "1:626102423213:web:f7cd5d66a193b619ac0024",
+	measurementId: "G-D5WM2H39Q2"
 };
 
 let app: FirebaseApp
