@@ -4,18 +4,9 @@
 	import { crossfade, fade } from 'svelte/transition'
 	import { cubicInOut, cubicOut, cubicIn, linear } from 'svelte/easing'
 	import fadeScale from '$lib/svelte-transitions-fade-scale.js'
-	import {
-		collection,
-		doc,
-		query,
-		onSnapshot,
-		where,
-		getDoc,
-		type DocumentData,
-	} from 'firebase/firestore'
+	import { collection, doc, query, onSnapshot, where, getDoc, type DocumentData } from 'firebase/firestore'
 	import { db } from '$lib/firebase'
 	import { dbUser } from '$lib/firestore'
-	import Masonry from 'svelte-bricks'
 	import { flip } from 'svelte/animate'
 
 	const debug = false
@@ -54,12 +45,12 @@
 		HT: 0,
 		WD: 0,
 		SHT: 0,
-		SWD: 0,
+		SWD: 0
 	}
 
 	async function setup(incoming: string) {
 		console.log(`LOG..+page: incoming`, incoming)
-		unsubViewer = onSnapshot(doc(db, 'viewers', incoming), doc => {
+		unsubViewer = onSnapshot(doc(db, 'viewers', incoming), (doc) => {
 			viewer = doc.data()
 			showGallery = viewer.gallery
 			galleryTile = viewer.galleryTile
@@ -67,28 +58,25 @@
 			showCarousel = viewer.carousel
 		})
 
-		const c = query(
-			collection(db, 'viewers', incoming, 'images'),
-			where('carousel', '==', true),
-		)
-		unsubGallery = onSnapshot(c, snap => {
-			carousel = [...snap.docs].map(doc => ({ id: doc.id, ...doc.data() }))
+		const c = query(collection(db, 'viewers', incoming, 'images'), where('carousel', '==', true))
+		unsubGallery = onSnapshot(c, (snap) => {
+			carousel = [...snap.docs].map((doc) => ({ id: doc.id, ...doc.data() }))
 		})
 
 		const g = query(collection(db, 'viewers', incoming, 'images'), where('gallery', '==', true))
-		unsubGallery = onSnapshot(g, snap => {
-			gallery = [...snap.docs].map(doc => ({ id: doc.id, ...doc.data() }))
+		unsubGallery = onSnapshot(g, (snap) => {
+			gallery = [...snap.docs].map((doc) => ({ id: doc.id, ...doc.data() }))
 		})
 
 		const n = query(collection(db, 'viewers', incoming, 'images'), where('now', '==', true))
 
-		unsubNow = onSnapshot(n, snap => {
-			now = [...snap.docs].map(doc => ({ id: doc.id, ...doc.data() }))
+		unsubNow = onSnapshot(n, (snap) => {
+			now = [...snap.docs].map((doc) => ({ id: doc.id, ...doc.data() }))
 		})
 	}
 
 	const [send, receive] = crossfade({
-		duration: d => Math.sqrt(d * 2000),
+		duration: (d) => Math.sqrt(d * 2000),
 
 		fallback(node, params) {
 			const style = getComputedStyle(node)
@@ -97,12 +85,12 @@
 			return {
 				duration: 2000,
 				easing: linear,
-				css: t => `
+				css: (t) => `
 					transform: ${transform} scale(${t});
 					opacity: ${t}
-				`,
+				`
 			}
-		},
+		}
 	})
 
 	function runBg() {
@@ -120,7 +108,7 @@
 			HT: window.innerHeight / 1.75,
 			WD: window.innerWidth / 3.5,
 			SHT: screen.height / 2,
-			SWD: screen.width / 4,
+			SWD: screen.width / 4
 		}
 	})
 
@@ -141,7 +129,7 @@
 	}
 
 	$: if (attach.length > 25) {
-		getDoc(doc(db, 'viewers', attach)).then(doc => {
+		getDoc(doc(db, 'viewers', attach)).then((doc) => {
 			if (doc.exists()) {
 				// console.log(`LOG..+page: cool`)
 				connected = true
@@ -156,11 +144,9 @@
 	}
 
 	$: if (gallery?.length < presentGallery?.length) {
-		let galleryIds = gallery.map(x => x.id)
-		let removed = presentGallery.filter(x => !galleryIds.includes(x.id))
-		presentGallery
-			.splice(presentGallery.indexOf(removed[0]), 1)
-			.sort((a, b) => b.index - a.index)
+		let galleryIds = gallery.map((x) => x.id)
+		let removed = presentGallery.filter((x) => !galleryIds.includes(x.id))
+		presentGallery.splice(presentGallery.indexOf(removed[0]), 1).sort((a, b) => b.index - a.index)
 	} else if (gallery?.length > presentGallery?.length) {
 		let added = gallery.at(-1)
 		presentGallery = gallery.sort((a, b) => b.index - a.index)
@@ -192,13 +178,13 @@
 					delay: 0,
 					duration: 2000,
 					easing: cubicOut,
-					baseScale: 0.85,
+					baseScale: 0.85
 				}}
 				out:fadeScale={{
 					delay: 0,
 					duration: 2000,
 					easing: cubicIn,
-					baseScale: 0.85,
+					baseScale: 0.85
 				}}
 			/>
 			<p
@@ -220,13 +206,13 @@
 					delay: 0,
 					duration: 2000,
 					easing: cubicOut,
-					baseScale: 0.85,
+					baseScale: 0.85
 				}}
 				out:fadeScale={{
 					delay: 0,
 					duration: 2000,
 					easing: cubicIn,
-					baseScale: 0.85,
+					baseScale: 0.85
 				}}
 				on:click={() => (localShowNow = false)}
 			/>
@@ -244,7 +230,7 @@
 				delay: 0,
 				duration: 500,
 				easing: cubicInOut,
-				baseScale: 0.85,
+				baseScale: 0.85
 			}}
 		>
 			{#if galleryTile && gallery.length > 1}
@@ -254,7 +240,7 @@
 						delay: 0,
 						duration: 500,
 						easing: cubicInOut,
-						baseScale: 0.85,
+						baseScale: 0.85
 					}}
 				>
 					<Masonry
@@ -296,7 +282,7 @@
 						delay: 0,
 						duration: 500,
 						easing: cubicInOut,
-						baseScale: 0.85,
+						baseScale: 0.85
 					}}
 				>
 					{#each presentGallery as img, idx (img.id)}
@@ -312,7 +298,7 @@
 								delay: 0,
 								duration: 500,
 								easing: cubicInOut,
-								baseScale: 0.85,
+								baseScale: 0.85
 							}}
 							class="h-screen transition-all duration-500 origin-center scale-100 bg-center bg-no-repeat hover:scale-95 group"
 							class:bg-contain={gallery.length <= 2}
@@ -342,7 +328,7 @@
 			transition:fade={{
 				delay: 0,
 				duration: 3000,
-				easing: cubicInOut,
+				easing: cubicInOut
 			}}
 		>
 			{#each [carousel[carIndex]] as img (carIndex)}
@@ -353,7 +339,7 @@
 					transition:fade={{
 						delay: 0,
 						duration: 3000,
-						easing: cubicInOut,
+						easing: cubicInOut
 					}}
 					style="position: absolute;"
 				/>
@@ -363,10 +349,7 @@
 		<div class="flex items-center justify-center w-screen h-screen">
 			<span class="w-fit">
 				<!-- <p style="font-size: 400px" class="invert opacity-20 grayscale">🎥</p> -->
-				<p
-					style="font-size: 44px"
-					class="absolute invert opacity-15 grayscale bottom-10 left-10 animate-pulse"
-				>
+				<p style="font-size: 44px" class="absolute invert opacity-15 grayscale bottom-10 left-10 animate-pulse">
 					No images selected.
 				</p>
 				<!-- <p style="font-size: 400px" class="opacity-20 grayscale">📸</p> -->
