@@ -1,9 +1,26 @@
 <script lang="ts">
-	import '../app.css';
+	import AuthCheck from '$lib/components/AuthCheck.svelte'
+	import '../app.css'
+	import TopNav from './_components/TopNav.svelte'
+	import { dbUser } from '$lib/firestore'
+	import { goto } from '$app/navigation'
+	import { page } from '$app/stores'
 
-	// import type { LayoutData } from './$types';
+	const { pathname } = $page.url
+	const show = pathname.includes('show') || pathname.includes('/clock')
 
-	// export let data: LayoutData;
+	if (!dbUser) {
+		console.log(`LOG..+layout: no user`)
+		goto('/')
+	}
+
+	const debug = false
 </script>
 
-<slot />
+{#if !show}
+	<TopNav />
+{/if}
+
+<div class="w-full h-full min-h-screen overflow-hidden" class:bg-red-800={debug} class:p-10={!show}>
+	<slot />
+</div>

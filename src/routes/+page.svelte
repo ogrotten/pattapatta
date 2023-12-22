@@ -1,21 +1,9 @@
 <script lang="ts">
-	import { goto } from '$app/navigation'
-	import ThemeSelect from '$lib/components/ThemeSelect.svelte'
-	import { auth } from '$lib/firebase'
+	import AuthCheck from '$lib/components/AuthCheck.svelte'
 	import { dbUser } from '$lib/firestore'
-	import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
-	import { onMount } from 'svelte'
+	import TopNav from './_components/TopNav.svelte'
 
-	async function signInWithGoogle() {
-		const provider = new GoogleAuthProvider()
-		const user = await signInWithPopup(auth, provider).then((res) => {
-			console.log('res', res)
-			// goto('/' + res.user.id)
-		})
-	}
-
-	onMount(async () => {})
-	$: console.log(`LOG..+page: $dbUser?.id`, $dbUser?.id)
+	$: console.log(`LOG..+page: user`, $dbUser)
 </script>
 
 <div class="">
@@ -23,14 +11,7 @@
 
 	{#if $dbUser}
 		<p>Logged in as {$dbUser.email}</p>
-		<button
-			on:click={auth.signOut().then(() => {
-				console.log('sign out')
-			})}>signout</button
-		>
 	{:else}
-		<button class="btn btn-primary" on:click={signInWithGoogle}>signin</button>
+		<p>Go <a href="/login">login</a></p>
 	{/if}
 </div>
-
-<ThemeSelect />
