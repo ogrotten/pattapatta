@@ -1,17 +1,36 @@
 <script lang="ts">
-	import ThemeSelect from '$lib/components/ThemeSelect.svelte';
-	import { config } from '$lib/config';
+	import { goto } from '$app/navigation'
+	import ThemeSelect from '$lib/components/ThemeSelect.svelte'
+	import { auth } from '$lib/firebase'
+	import { dbUser } from '$lib/firestore'
+	import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+	import { onMount } from 'svelte'
+
+	async function signInWithGoogle() {
+		const provider = new GoogleAuthProvider()
+		const user = await signInWithPopup(auth, provider).then((res) => {
+			console.log('res', res)
+			// goto('/' + res.user.id)
+		})
+	}
+
+	onMount(async () => {})
+	$: console.log(`LOG..+page: $dbUser?.id`, $dbUser?.id)
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<div class="">
+	<h1>Welcome</h1>
 
-theme chooser
-
-<!-- <select data-choose-theme>
-	{#each config.daisyui.themes as theme}
-		<option value={theme}>{theme}</option>
-	{/each}
-</select> -->
+	{#if $dbUser}
+		<p>Logged in as {$dbUser.email}</p>
+		<button
+			on:click={auth.signOut().then(() => {
+				console.log('sign out')
+			})}>signout</button
+		>
+	{:else}
+		<button class="btn btn-primary" on:click={signInWithGoogle}>signin</button>
+	{/if}
+</div>
 
 <ThemeSelect />
