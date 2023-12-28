@@ -30,6 +30,7 @@
   },
   "type": "module",
   "dependencies": {
+    "bits-ui": "^0.11.8",
     "clsx": "^2.0.0",
     "firebase": "^10.7.1",
     "radix-icons-svelte": "^1.2.1",

@@ -18,9 +18,11 @@
 </script>
 
 {#if !show}
-	<TopNav />
+	<div class="w-full px-10 py-4 border-b">
+		<TopNav />
+	</div>
 {/if}
 
-<div class="w-full h-full min-h-screen overflow-hidden" class:bg-red-800={debug} class:p-10={!show}>
+<div class="w-full h-full min-h-screen" class:bg-red-800={debug} class:p-10={!show}>
 	<slot />
 </div>
