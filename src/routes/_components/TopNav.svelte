@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ThemeSelect from '$lib/components/ThemeSelect.svelte'
+	// import * as Menubar from '$lib/components/ui/menubar'
 	import { dbUser } from '$lib/firestore'
 </script>
 
@@ -17,7 +17,6 @@
 		<ul class="px-1 menu menu-horizontal">
 			{#if $dbUser}
 				<li class="flex flex-row">
-					<ThemeSelect />
 					<p class="">{$dbUser.email}</p>
 					<a href="/logout">Logout</a>
 				</li>
